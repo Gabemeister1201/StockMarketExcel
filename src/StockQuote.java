@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class StockQuote {
 
+    // Initial symbol list (loaded by user input)
     public static ArrayList<String> symbols = new ArrayList<>();
 	
     public static ArrayList<String> stockSymbols = new ArrayList<>();
@@ -25,6 +26,7 @@ public class StockQuote {
 	
 	public static void GetPrice(String symbol) throws IOException{
 	{
+		// Pull information from google stocks
 		URL url = new URL("https://www.google.com/finance?q=" + symbol);
 		URLConnection urlConn = url.openConnection();
 		InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());		
@@ -33,14 +35,17 @@ public class StockQuote {
 		String price = ("No Price Found");
 		String line = buff.readLine();
 		
+		// check each line until it is empty
 		while(line != null)
 		{
-			if(line.contains("[\"" + symbol + "\","))
+			if(line.contains("[\"" + symbol + "\",")) // if containts HTML stock quote reference
 			{
+				// Grab Stock Quote out of reference
 				int target = line.indexOf("[\"" + symbol + "\",");
 				int deci = line.indexOf(".", target);
 				int start = deci;	
 				
+				// Check if the Stock Quote Symbol is not a digit
 				while(!Character.isDigit(line.charAt(start + 1)))
 				{
 					//System.out.println("Not a digit");
@@ -62,19 +67,20 @@ public class StockQuote {
 						
 			line = buff.readLine();
 		}
-		System.out.println(symbol + ": " + price);
 		
+	System.out.println(symbol + ": " + price);
 		
-		// Create Excel Spreadsheet Here	
-		XSSFWorkbook workbook = new XSSFWorkbook();
-	    XSSFSheet sheet = workbook.createSheet("Stock Market Quotes");	
+	// Create Excel Spreadsheet	
+    	XSSFWorkbook workbook = new XSSFWorkbook();
+	XSSFSheet sheet = workbook.createSheet("Stock Market Quotes");	
 	    
-	    // Create Row with title and dates here
+	// Create Row with title and dates here
 	    
         int rowCount = 1;
         int columnCount = 0;                        
         int valueColumnCount = 1;
 	    
+	// Loop through item in the symbols	
         for (String stock : stockSymbols) 
         {        	
         	Row row = sheet.createRow(rowCount++);
