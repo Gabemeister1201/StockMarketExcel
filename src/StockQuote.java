@@ -13,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class StockQuote {
 
-	public static ArrayList<String> symbols = new ArrayList<>();
+    public static ArrayList<String> symbols = new ArrayList<>();
 	
     public static ArrayList<String> stockSymbols = new ArrayList<>();
     public static ArrayList<String> stockValues = new ArrayList<>();
